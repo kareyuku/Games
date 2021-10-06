@@ -1,0 +1,156 @@
+<html>
+    <head>
+        <title>Game</title>
+        <meta name="author" content="Bartuś" >
+        <link rel="stylesheet" href="styl.css">
+    </head>
+    <body>
+        <div class="tictac">    
+            <div class="place" onclick="test( 1 )" >
+                <h1 id="1" ></h1>
+            </div>
+            <div class="place" onclick="test( 2 )" >
+                <h1 id="2" ></h1>
+            </div>
+            <div class="place" onclick="test( 3 )" >
+                <h1 id="3" ></h1>
+            </div>
+            <div class="place" onclick="test( 4 )" >
+                <h1 id="4" ></h1>
+            </div>
+            <div class="place" onclick="test( 5 )" >
+                <h1 id="5" ></h1>
+            </div>
+            <div class="place" onclick="test( 6 )" >
+                <h1 id="6" ></h1>
+            </div>
+            <div class="place" onclick="test( 7 )" >
+                <h1 id="7" ></h1>
+            </div>
+            <div class="place" onclick="test( 8 )" >
+                <h1 id="8" ></h1>
+            </div>
+            <div class="place" onclick="test( 9 )">
+                <h1 id="9" ></h1>
+            </div>
+        </div>
+        <div class="Win">
+            <h1>Statystyki</h1>
+            <div class="stats">
+                <div class="stat">
+                    X
+                    <input id="statX" value="0" disabled >
+                </div>
+                <div class="stat">
+                    O
+                    <input id="statO" value="0" disabled >
+                </div>
+            </div>
+            <div class="log">
+                <div class="stat">
+                    Ostatnia akcja
+                    <input id="ostatniaakcja" disabled >
+                </div>
+
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+
+    let opcja = true;
+
+    let plansza = [
+        "", "", "",
+        "", "", "",
+        "", "", "",
+    ]
+
+    let win = false;
+
+    function sukces() {
+            win = true;
+        }
+
+        
+    function clearPlansza() {
+        for( let i = 1; i < 10; i++ ) {
+            this.document.getElementById( i ).innerHTML = ""
+            plansza[i] = ""
+            console.log( i )
+        }
+        win = false;
+    }
+
+    function sprawdz( ) {
+
+        if( plansza[0] == "x" && plansza[1] == "x" && plansza[2] == "x" ) return "x"
+        if( plansza[3] == "x" && plansza[4] == "x" && plansza[5] == "x" ) return "x"
+        if( plansza[6] == "x" && plansza[7] == "x" && plansza[8] == "x" ) return "x"
+        if( plansza[0] == "x" && plansza[4] == "x" && plansza[8] == "x" ) return "x"
+        if( plansza[2] == "x" && plansza[4] == "x" && plansza[6] == "x" ) return "x"
+
+        if( plansza[0] == "o" && plansza[1] == "o" && plansza[2] == "o"  ) return "o"
+        if( plansza[3] == "o" && plansza[4] == "o" && plansza[5] == "o" ) return "o"
+        if( plansza[6] == "o" && plansza[7] == "o" && plansza[8] == "o" ) return "o"
+        if( plansza[0] == "o" && plansza[4] == "o" && plansza[8] == "o" ) return "o"
+        if( plansza[2] == "o" && plansza[4] == "o" && plansza[6] == "o" ) return "o"
+
+        return "n"
+
+
+    }
+
+    async function test( id ) {
+
+        if( win) return;
+        const ticPlace = this.document.getElementById( id )
+        id = id - 1
+        if( ticPlace.innerHTML == "x" || ticPlace.innerHTML == "o" ) return;
+
+        if( opcja == false ) {
+            plansza[id] = "x"
+            ticPlace.innerHTML = "x"
+            opcja = true;
+        } else {
+            plansza[id] = "o"
+            ticPlace.innerHTML = "o"
+            opcja = false;
+        }
+
+        await ticPlace.innerHTML
+
+        // Sprawdzanie czy ktoś wygrał
+
+        const sprawdze = sprawdz()
+
+        console.log( sprawdze)
+        if( sprawdze == "o" ) {
+            const getO = this.document.getElementById( "statO" )
+            getO.value = parseFloat( getO.value ) + 1
+            this.document.getElementById( "ostatniaakcja" ).value = "Wygrał O"
+            win = true;
+            clearPlansza()
+        }   
+        if( sprawdze == "x" ) {
+            const getX = this.document.getElementById( "statX" )
+            win = true;
+            getX.value = parseFloat( getX.value ) + 1
+            this.document.getElementById( "ostatniaakcja" ).value = "Wygrał X"
+            clearPlansza()
+
+        } else {
+            let liczba = 0;
+            for( let i = 0; i < 10; i++ ) {
+                if( plansza[i] != "" ) liczba++
+            }
+            if( liczba == 9 ) {
+                win = true;
+                this.document.getElementById( "ostatniaakcja" ).value = "Remis"
+                clearPlansza()
+            }
+            return;
+        }
+
+    }
+</script>
